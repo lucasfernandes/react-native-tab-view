@@ -1,10 +1,9 @@
 /* @flow */
 
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { Platform, View, ScrollView, StyleSheet } from 'react-native';
-import { SceneRendererPropType } from './TabViewPropTypes';
-import type { SceneRendererProps, Route } from './TabViewTypeDefinitions';
+import { PagerRendererPropType } from './TabViewPropTypes';
+import type { PagerRendererProps, Route } from './TabViewTypeDefinitions';
 
 type ScrollEvent = {
   nativeEvent: {
@@ -15,26 +14,17 @@ type ScrollEvent = {
   },
 };
 
-type State = {
-  initialOffset: { x: number, y: number },
-};
+type State = {|
+  initialOffset: {| x: number, y: number |},
+|};
 
-type Props<T> = SceneRendererProps<T> & {
-  animationEnabled?: boolean,
-  swipeEnabled?: boolean,
-  children?: React.Node,
-};
+type Props<T> = PagerRendererProps<T>;
 
 export default class TabViewPagerScroll<T: Route<*>> extends React.Component<
   Props<T>,
   State
 > {
-  static propTypes = {
-    ...SceneRendererPropType,
-    animationEnabled: PropTypes.bool,
-    swipeEnabled: PropTypes.bool,
-    children: PropTypes.node,
-  };
+  static propTypes = PagerRendererPropType;
 
   constructor(props: Props<T>) {
     super(props);
@@ -78,7 +68,7 @@ export default class TabViewPagerScroll<T: Route<*>> extends React.Component<
   }
 
   _resetListener: Object;
-  _scrollView: ?ScrollView;
+  _scrollView: any;
   _nextOffset = 0;
   _isIdle: boolean = true;
 
@@ -104,12 +94,12 @@ export default class TabViewPagerScroll<T: Route<*>> extends React.Component<
   _handleScroll = (e: ScrollEvent) => {
     this._isIdle =
       Math.abs(e.nativeEvent.contentOffset.x - this._nextOffset) < 0.1;
-    this.props.position.setValue(
-      e.nativeEvent.contentOffset.x / this.props.layout.width
+    this.props.panX.setValue(
+      -e.nativeEvent.contentOffset.x + this.props.layout.width
     );
   };
 
-  _setRef = (el: ?ScrollView) => (this._scrollView = el);
+  _setRef: Function = el => (this._scrollView = el ? el._component : null);
 
   render() {
     const { children, layout, navigationState } = this.props;

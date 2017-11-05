@@ -19,7 +19,8 @@ import type {
   Route,
   Style,
 } from './TabViewTypeDefinitions';
-import default_styles from './tabBarStyles'
+
+import styles from './tabBarStyles'
 
 type IndicatorProps<T> = SceneRendererProps<T> & {
   width: Animated.Value,
@@ -76,7 +77,6 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
   static defaultProps = {
     getLabelText: ({ route }) =>
       route.title ? route.title.toUpperCase() : null,
-      style: default_styles,
   };
 
   constructor(props: Props<T>) {
@@ -151,8 +151,6 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
   _isMomentumScroll: boolean = false;
 
   _renderLabel = (scene: Scene<*>) => {
-    const { style } = this.props;
-
     if (typeof this.props.renderLabel !== 'undefined') {
       return this.props.renderLabel(scene);
     }
@@ -161,13 +159,11 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
       return null;
     }
     return (
-      <Text style={[style.tabLabel, this.props.labelStyle]}>{label}</Text>
+      <Text style={[styles.tabLabel, this.props.labelStyle]}>{label}</Text>
     );
   };
 
   _renderIndicator = (props: IndicatorProps<T>) => {
-    const { style } = this.props;
-
     if (typeof this.props.renderIndicator !== 'undefined') {
       return this.props.renderIndicator(props);
     }
@@ -179,7 +175,7 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
     return (
       <Animated.View
         style={[
-          style.indicator,
+          styles.indicator,
           { width, transform: [{ translateX }] },
           this.props.indicatorStyle,
         ]}
@@ -332,7 +328,7 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
   _setRef = (el: ?ScrollView) => (this._scrollView = el);
 
   render() {
-    const { position, navigationState, scrollEnabled, style } = this.props;
+    const { position, navigationState, scrollEnabled } = this.props;
     const { routes, index } = navigationState;
     const maxDistance = this._getMaxScrollableDistance(this.props);
     const finalTabWidth = this._getFinalTabWidth(this.props);
@@ -357,11 +353,11 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
     });
 
     return (
-      <Animated.View style={[style.tabBar, this.props.style]}>
+      <Animated.View style={[styles.tabBar, this.props.style]}>
         <Animated.View
           pointerEvents="none"
           style={[
-            style.indicatorContainer,
+            styles.indicatorContainer,
             scrollEnabled
               ? { width: tabBarWidth, transform: [{ translateX }] }
               : null,
@@ -372,7 +368,7 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
             width: new Animated.Value(finalTabWidth),
           })}
         </Animated.View>
-        <View style={style.scroll}>
+        <View style={styles.scroll}>
           <ScrollView
             horizontal
             keyboardShouldPersistTaps="always"
@@ -384,8 +380,8 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
             automaticallyAdjustContentInsets={false}
             overScrollMode="never"
             contentContainerStyle={[
-              style.tabContent,
-              scrollEnabled ? null : style.container,
+              styles.tabContent,
+              scrollEnabled ? null : styles.container,
             ]}
             scrollEventThrottle={16}
             onScroll={this._handleScroll}
@@ -473,13 +469,13 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
                   }}
                   style={tabContainerStyle}
                 >
-                  <View pointerEvents="none" style={style.container}>
+                  <View pointerEvents="none" style={styles.container}>
                     <Animated.View
                       style={[
-                        style.tabItem,
+                        styles.tabItem,
                         tabStyle,
                         passedTabStyle,
-                        style.container,
+                        styles.container,
                       ]}
                     >
                       {icon}
@@ -488,7 +484,7 @@ export default class TabBar<T: Route<*>> extends React.PureComponent<
                     {badge ? (
                       <Animated.View
                         style={[
-                          style.badge,
+                          styles.badge,
                           { opacity: this.state.visibility },
                         ]}
                       >

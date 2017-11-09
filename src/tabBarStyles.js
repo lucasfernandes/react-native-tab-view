@@ -30,6 +30,8 @@ export default StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     margin: 8,
+    fontFamily: 'Arial',
+    fontSize: 15,
   },
   tabItem: {
     flexGrow: 1,
@@ -56,6 +58,6 @@ export default StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-    height: 4,
+    height: 5,
   },
 });
